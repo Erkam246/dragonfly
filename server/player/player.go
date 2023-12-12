@@ -1455,6 +1455,10 @@ func (p *Player) UseItemOnEntity(e world.Entity) bool {
 	if p.Handler().HandleItemUseOnEntity(ctx, e); ctx.Cancelled() {
 		return false
 	}
+	if ep, ok := e.(*Player); ok {
+		ctxReverse := event.C()
+		ep.Handler().HandleItemUseOnEntityReverse(ctxReverse, p)
+	}
 	i, left := p.HeldItems()
 	usable, ok := i.Item().(item.UsableOnEntity)
 	if !ok {
